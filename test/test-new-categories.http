@@ -1,0 +1,24 @@
+### Test the new categories endpoint
+GET http://localhost:5000/api/problems/categories
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Test login to get token first
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test"
+}
+
+### Test getting problems by new category - Mobile Development
+GET http://localhost:5000/api/problems?category=Mobile Development
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Test getting problems by new category - DevOps & Cloud
+GET http://localhost:5000/api/problems?category=DevOps & Cloud
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Test getting problems by new category - AI & Machine Learning
+GET http://localhost:5000/api/problems?category=AI & Machine Learning
+Authorization: Bearer YOUR_JWT_TOKEN_HERE

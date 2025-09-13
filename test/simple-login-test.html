@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Login Test</title>
+</head>
+<body>
+    <h1>Simple Login Test</h1>
+    <button onclick="testLogin()">Test Login API</button>
+    <button onclick="testUserDebug()">Test User Debug</button>
+    <div id="result"></div>
+
+    <script>
+        async function testLogin() {
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'test',
+                        password: 'test'
+                    })
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('result').innerHTML = '<p style="color: green;">Login successful! Token: ' + data.token.substring(0, 50) + '...</p>';
+                } else {
+                    document.getElementById('result').innerHTML = '<p style="color: red;">Login failed: ' + JSON.stringify(data) + '</p>';
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+            }
+        }
+
+        async function testUserDebug() {
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/test-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'test',
+                        password: 'test'
+                    })
+                });
+                
+                const data = await response.json();
+                document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html>

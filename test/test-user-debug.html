@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Debug Test</title>
+</head>
+<body>
+    <h1>User Debug Test</h1>
+    <button onclick="testUser()">Test User Credentials</button>
+    <div id="result"></div>
+
+    <script>
+        async function testUser() {
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/test-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'test',
+                        password: 'test'
+                    })
+                });
+                
+                const data = await response.json();
+                document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html>

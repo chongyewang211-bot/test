@@ -1,0 +1,41 @@
+### Test Auto-Incrementing Problem Numbers
+
+### 1. First, login to get a token
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test"
+}
+
+### 2. Create a test problem (should get problem number 26)
+POST http://localhost:5000/api/problems/test-create
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### 3. Create another test problem (should get problem number 27)
+POST http://localhost:5000/api/problems/test-create
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### 4. Create a third test problem (should get problem number 28)
+POST http://localhost:5000/api/problems/test-create
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### 5. Get all problems to see the sequential numbering
+GET http://localhost:5000/api/problems
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### 6. Create a problem manually with specific data
+POST http://localhost:5000/api/problems
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "title": "Manual Test Problem",
+  "description": "This problem was created manually",
+  "difficulty": "Medium",
+  "category": "API & Backend",
+  "tags": ["Manual", "Test"],
+  "acceptanceRate": 75,
+  "likes": 10
+}

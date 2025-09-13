@@ -1,0 +1,25 @@
+### Test Login with test user
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test"
+}
+
+### Test Login with wrong credentials
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "wrongpassword"
+}
+
+### Get all problems (requires authentication)
+GET http://localhost:5000/api/problems
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Get all categories (requires authentication)
+GET http://localhost:5000/api/problems/categories
+Authorization: Bearer YOUR_JWT_TOKEN_HERE

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>API Test</h1>
+    <button onclick="testLogin()">Test Login</button>
+    <button onclick="testProblems()">Test Problems</button>
+    <button onclick="testCategories()">Test Categories</button>
+    <div id="result"></div>
+
+    <script>
+        let token = '';
+
+        async function testLogin() {
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'test',
+                        password: 'test'
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.token) {
+                    token = data.token;
+                    document.getElementById('result').innerHTML = '<p style="color: green;">Login successful! Token: ' + token.substring(0, 50) + '...</p>';
+                } else {
+                    document.getElementById('result').innerHTML = '<p style="color: red;">Login failed: ' + JSON.stringify(data) + '</p>';
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+            }
+        }
+
+        async function testProblems() {
+            if (!token) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Please login first!</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/problems', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                
+                const data = await response.json();
+                document.getElementById('result').innerHTML = '<p style="color: green;">Problems loaded: ' + data.length + ' problems</p><pre>' + JSON.stringify(data.slice(0, 2), null, 2) + '</pre>';
+            } catch (error) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+            }
+        }
+
+        async function testCategories() {
+            if (!token) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Please login first!</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/problems/categories', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                
+                const data = await response.json();
+                document.getElementById('result').innerHTML = '<p style="color: green;">Categories loaded: ' + data.length + ' categories</p><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html>
