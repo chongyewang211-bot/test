@@ -1,0 +1,25 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <a routerLink="/problems">Problem Solver</a>
+    </div>
+
+    @if (currentUser) {
+      <div class="navbar-menu">
+        <a routerLink="/problems" routerLinkActive="active" class="nav-link">Problems</a>
+        
+        <div class="user-menu" (click)="toggleMenu()">
+          <div class="user-avatar">{{ currentUser.username.charAt(0).toUpperCase() }}</div>
+          
+          @if (isMenuOpen) {
+            <div class="dropdown-menu">
+              <div class="dropdown-item">{{ currentUser.email }}</div>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item" (click)="logout()">Logout</button>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</nav>

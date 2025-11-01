@@ -1,0 +1,68 @@
+<div class="problem-list-container">
+  <div class="header">
+    <h1>Problems</h1>
+    <p>Browse coding problems</p>
+  </div>
+
+  <div class="categories">
+    <button 
+      class="category-chip" 
+      [class.active]="selectedCategory === 'all'"
+      (click)="filterByCategory('all')">
+      All
+    </button>
+    @for (category of categories; track category.id) {
+      <button 
+        class="category-chip" 
+        [class.active]="selectedCategory === category.key"
+        (click)="filterByCategory(category.key)">
+        {{ category.name }} ({{ category.problemCount }})
+      </button>
+    }
+  </div>
+
+  @if (isLoading) {
+    <div class="loading">
+      <p>Loading...</p>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage) {
+    @if (problems.length === 0) {
+      <div class="no-problems">
+        <p>No problems found</p>
+      </div>
+    } @else {
+      <div class="problems-grid">
+        @for (problem of problems; track problem.id) {
+          <div class="problem-card" (click)="viewProblemDetail(problem.id)">
+            <div class="problem-header">
+              <div>#{{ problem.problemNumber }}</div>
+              <span class="difficulty-badge" [ngClass]="getDifficultyClass(problem.difficulty)">
+                {{ problem.difficulty }}
+              </span>
+            </div>
+            
+            <h3 class="problem-title">{{ problem.title }}</h3>
+            
+            <p class="problem-description">
+              {{ problem.description.substring(0, 100) }}...
+            </p>
+            
+            <div class="problem-tags">
+              @for (tag of problem.tags.slice(0, 3); track tag) {
+                <span class="tag">{{ tag }}</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

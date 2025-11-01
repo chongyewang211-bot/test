@@ -1,0 +1,59 @@
+<div class="problem-detail-container">
+  @if (isLoading) {
+    <div class="loading">
+      <p>Loading...</p>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="error-message">
+      {{ errorMessage }}
+      <button class="back-button" (click)="goBack()">Back</button>
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage && problem) {
+    <div class="problem-content">
+      <button class="back-link" (click)="goBack()">← Back</button>
+
+      <div class="problem-header">
+        <div class="header-top">
+          <div>#{{ problem.problemNumber }}</div>
+          <span class="difficulty-badge" [ngClass]="getDifficultyClass(problem.difficulty)">
+            {{ problem.difficulty }}
+          </span>
+        </div>
+        
+        <h1 class="problem-title">{{ problem.title }}</h1>
+        
+        <div class="problem-meta">
+          <div>Category: {{ problem.category }}</div>
+        </div>
+      </div>
+
+      <div class="problem-body">
+        <div class="section">
+          <h2>Description</h2>
+          <div class="description-content">
+            {{ problem.description }}
+          </div>
+        </div>
+
+        @if (problem.tags && problem.tags.length > 0) {
+          <div class="section">
+            <h2>Tags</h2>
+            <div class="tags-container">
+              @for (tag of problem.tags; track tag) {
+                <span class="tag">{{ tag }}</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="problem-footer">
+        <p>Created: {{ problem.createdAt | date }}</p>
+      </div>
+    </div>
+  }
+</div>
