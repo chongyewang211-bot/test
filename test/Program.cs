@@ -36,6 +36,7 @@ builder.Services.AddSingleton<MongoDbService>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProblemService, ProblemService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"] ?? "YourSuperSecretKeyThatIsAtLeast32CharactersLong!";

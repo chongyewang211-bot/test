@@ -21,6 +21,41 @@ namespace test.Controllers
             _configuration = configuration;
         }
 
+        [HttpPost("register")]
+        public async Task<ActionResult<LoginResponse>> Register([FromBody] RegisterRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var userExists = await _userService.UserExistsAsync(request.Username);
+                if (userExists)
+                {
+                    return BadRequest(new { message = "Username already exists" });
+                }
+
+                var user = await _userService.CreateUserAsync(request.Username, request.Email, request.Password);
+                
+                var token = GenerateJwtToken(user);
+                var expiresAt = DateTime.UtcNow.AddHours(24);
+
+                return Ok(new LoginResponse
+                {
+                    Token = token,
+                    Username = user.Username,
+                    Email = user.Email,
+                    ExpiresAt = expiresAt
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error creating user", error = ex.Message });
+            }
+        }
+
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
         {
@@ -29,28 +64,35 @@ namespace test.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _userService.GetUserByUsernameAsync(request.Username);
-            if (user == null)
+            try
             {
-                return Unauthorized(new { message = "Invalid username or password" });
+                var user = await _userService.GetUserByUsernameAsync(request.Username);
+                if (user == null)
+                {
+                    return Unauthorized(new { message = "Invalid username or password" });
+                }
+
+                var isValidPassword = await _userService.ValidatePasswordAsync(request.Password, user.PasswordHash);
+                if (!isValidPassword)
+                {
+                    return Unauthorized(new { message = "Invalid username or password" });
+                }
+
+                var token = GenerateJwtToken(user);
+                var expiresAt = DateTime.UtcNow.AddHours(24);
+
+                return Ok(new LoginResponse
+                {
+                    Token = token,
+                    Username = user.Username,
+                    Email = user.Email,
+                    ExpiresAt = expiresAt
+                });
             }
-
-            var isValidPassword = await _userService.ValidatePasswordAsync(request.Password, user.PasswordHash);
-            if (!isValidPassword)
+            catch (Exception ex)
             {
-                return Unauthorized(new { message = "Invalid username or password" });
+                return StatusCode(500, new { message = "Database connection error. Please check MongoDB connection.", error = ex.Message });
             }
-
-            var token = GenerateJwtToken(user);
-            var expiresAt = DateTime.UtcNow.AddHours(24);
-
-            return Ok(new LoginResponse
-            {
-                Token = token,
-                Username = user.Username,
-                Email = user.Email,
-                ExpiresAt = expiresAt
-            });
         }
 
         private string GenerateJwtToken(User user)

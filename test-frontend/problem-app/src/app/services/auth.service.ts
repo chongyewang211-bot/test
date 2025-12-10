@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { LoginRequest, LoginResponse } from '../models/user.model';
+import { LoginRequest, RegisterRequest, LoginResponse } from '../models/user.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -36,6 +36,18 @@ export class AuthService {
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
+      tap(response => {
+        localStorage.setItem(this.tokenKey, response.token);
+        localStorage.setItem('username', response.username);
+        localStorage.setItem('email', response.email);
+        localStorage.setItem('expiresAt', response.expiresAt.toString());
+        this.userSubject.next(response);
+      })
+    );
+  }
+
+  register(registerData: RegisterRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/register`, registerData).pipe(
       tap(response => {
         localStorage.setItem(this.tokenKey, response.token);
         localStorage.setItem('username', response.username);

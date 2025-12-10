@@ -7,6 +7,9 @@
     @if (currentUser) {
       <div class="navbar-menu">
         <a routerLink="/problems" routerLinkActive="active" class="nav-link">Problems</a>
+        <a routerLink="/post-problem" routerLinkActive="active" class="nav-link">Post Problem</a>
+        <a routerLink="/comments" routerLinkActive="active" class="nav-link">Comments</a>
+        <a routerLink="/online-users" routerLinkActive="active" class="nav-link">Online Users</a>
         
         <div class="user-menu" (click)="toggleMenu()">
           <div class="user-avatar">{{ currentUser.username.charAt(0).toUpperCase() }}</div>

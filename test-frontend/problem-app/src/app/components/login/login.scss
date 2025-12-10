@@ -58,6 +58,21 @@
   opacity: 0.5;
 }
 
+.toggle-mode {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.toggle-mode a {
+  color: #333;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.toggle-mode a:hover {
+  color: #000;
+}
+
 .test-credentials {
   margin-top: 20px;
   padding: 10px;

@@ -1,0 +1,105 @@
+<div class="post-problem-container">
+  <div class="post-problem-card">
+    <div class="header">
+      <h1>Post a Problem</h1>
+      <p>Share a coding problem with the community</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="problem-form">
+      <div class="form-group">
+        <label for="title">Title *</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          [(ngModel)]="problem.title"
+          required
+          [disabled]="isSubmitting"
+          placeholder="Enter problem title"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description *</label>
+        <textarea
+          id="description"
+          name="description"
+          [(ngModel)]="problem.description"
+          required
+          rows="8"
+          [disabled]="isSubmitting"
+          placeholder="Describe the problem in detail"
+        ></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="difficulty">Difficulty *</label>
+          <select
+            id="difficulty"
+            name="difficulty"
+            [(ngModel)]="problem.difficulty"
+            required
+            [disabled]="isSubmitting"
+          >
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category *</label>
+          <select
+            id="category"
+            name="category"
+            [(ngModel)]="problem.category"
+            required
+            [disabled]="isLoading || isSubmitting"
+          >
+            @if (isLoading) {
+              <option>Loading categories...</option>
+            } @else {
+              @for (category of categories; track category.id) {
+                <option [value]="category.name">{{ category.name }}</option>
+              }
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="tags">Tags</label>
+        <input
+          type="text"
+          id="tags"
+          name="tags"
+          [(ngModel)]="tagsInput"
+          [disabled]="isSubmitting"
+          placeholder="Enter tags separated by commas (e.g., array, sorting)"
+        />
+        <small class="form-hint">Separate multiple tags with commas</small>
+      </div>
+
+      @if (errorMessage) {
+        <div class="error-message">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="goBack()" [disabled]="isSubmitting">
+          Cancel
+        </button>
+        <button type="submit" class="btn-submit" [disabled]="isSubmitting || isLoading">
+          @if (isSubmitting) {
+            Posting...
+          } @else {
+            Post Problem
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+

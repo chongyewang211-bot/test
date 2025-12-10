@@ -7,8 +7,21 @@ export interface User {
   isActive: boolean;
 }
 
+export interface OnlineUser {
+  id: string;
+  username: string;
+  email: string;
+  isActive: boolean;
+}
+
 export interface LoginRequest {
   username: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  username: string;
+  email: string;
   password: string;
 }
 
@@ -18,4 +31,3 @@ export interface LoginResponse {
   email: string;
   expiresAt: Date;
 }
-
